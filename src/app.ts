@@ -12,10 +12,9 @@ app.use(cors());
 
 app.get('/', (req, res) => {
   res.status(200).json({
-    message: 'welcome to the server 6000',
+    message: 'welcome to the server 5000',
   });
 });
 
-// Global error handling
 
 export default app;
