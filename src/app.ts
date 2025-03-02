@@ -3,7 +3,6 @@ import cors from 'cors';
 import router from './routes';
 const app = express();
 
-
 //parsers
 app.use(express.json());
 app.use(cors());
@@ -16,6 +15,5 @@ app.get('/', (req, res) => {
     message: 'welcome to the server 5000',
   });
 });
-
 
 export default app;
