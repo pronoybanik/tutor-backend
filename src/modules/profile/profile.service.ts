@@ -26,8 +26,10 @@ const updateProfileIntoDB = async (userId: string, paramsId: string, payload: Pa
 
     // Step 3: If role is updated, update the User model too
     if (payload.role && payload.role !== user.role) {
-        user.role = payload.role;
-        await user.save();
+        await User.updateOne(
+            { _id: User._id },
+            { $push: { role: payload.role } }
+        )
     }
 
     // Step 4: Update profile data
@@ -48,9 +50,15 @@ const getUserProfileIntoDB = async (userId: string) => {
     return result
 }
 
+const getUserSingleProfileIntoDB = async (id: string) => {
+    const result = await Profile.findById(id)
+    return result
+}
+
 
 
 export const ProfileService = {
     updateProfileIntoDB,
-    getUserProfileIntoDB
+    getUserProfileIntoDB,
+    getUserSingleProfileIntoDB
 };

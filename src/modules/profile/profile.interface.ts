@@ -8,6 +8,8 @@ export interface IProfile extends Document {
     role: UserRole.ADMIN | UserRole.STUDENT | UserRole.TUTOR;
     experience: number;
     ratings: number;
+    image: string;
     reviews: Types.ObjectId[];
     isVerified: boolean;
+    requestRole: UserRole.TUTOR | UserRole.STUDENT;
 }

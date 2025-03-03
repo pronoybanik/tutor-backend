@@ -1,6 +1,7 @@
 import { Schema, model } from "mongoose";
 import { IProfile } from "./profile.interface";
 import { UserRole } from "../user/user.interface";
+import { string } from "zod";
 
 const ProfileSchema = new Schema<IProfile>(
     {
@@ -8,6 +9,9 @@ const ProfileSchema = new Schema<IProfile>(
             type: Schema.Types.ObjectId,
             ref: "User",
             required: true,
+        },
+        image: {
+            type: String,
         },
         subjects: {
             type: [String],
@@ -37,6 +41,11 @@ const ProfileSchema = new Schema<IProfile>(
                 ref: "Review",
             },
         ],
+        requestRole: {
+            type: String,
+            enum: [UserRole.TUTOR, UserRole.STUDENT],
+            default: UserRole.STUDENT,
+        },
         isVerified: {
             type: Boolean,
             default: false,
