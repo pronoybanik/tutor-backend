@@ -23,8 +23,8 @@ const userSchema = new Schema<IUser>(
     },
     role: {
       type: String,
-      enum: [UserRole.ADMIN, UserRole.student, UserRole.ADMIN],
-      default: UserRole.student,
+      enum: [UserRole.ADMIN, UserRole.STUDENT, UserRole.TUTOR],
+      default: UserRole.STUDENT,
     },
     status: {
       type: String,

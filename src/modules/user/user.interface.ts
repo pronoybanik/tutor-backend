@@ -3,8 +3,8 @@ import { USER_ROLE } from './user.constant';
 
 export enum UserRole {
   ADMIN = 'admin',
-  student = 'student',
-  tutor = 'tutor',
+  STUDENT = 'student',
+  TUTOR = 'tutor',
 }
 
 export interface IUser {
