@@ -12,6 +12,12 @@ export default [
     ignores: ['node_modules', 'dist'],
     rules: {
       'no-unused-vars': 'error',
+      'prefer-const': 'error',
+      'no-console': 'warn',
+      'no-undef': 'error',
+    },
+    globals: {
+      process: 'readonly',
     },
   },
 ];

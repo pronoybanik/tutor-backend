@@ -1,6 +1,8 @@
 import express, { Application } from 'express';
 import cors from 'cors';
 import router from './routes';
+import globalErrorHandler from './middlewares/globalErrorhandler';
+import NotFound from './middlewares/notFound';
 const app: Application = express();
 
 //parsers
@@ -17,5 +19,11 @@ app.get('/', (req, res) => {
     message: 'welcome to the server 5000',
   });
 });
+
+
+// Global error handling
+app.use(globalErrorHandler);
+
+app.use(NotFound);
 
 export default app;
