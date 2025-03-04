@@ -1,23 +1,23 @@
-// Ensure this interface is correctly defined
-
 import { IImageFile } from "../../interface/IImageFile";
+import AppError from "../../middlewares/AppError";
+import { IJwtPayload } from "../auth/auth.interface";
+import { UserRole } from "../user/user.interface";
 import { ISubject } from "./subject.interface";
+import httpStatus from "http-status";
 import { Subject } from "./subject.module";
 
 const createSubjectIntoDB = async (
     subjectData: Partial<ISubject>,
-    image: IImageFile
+    image?: IImageFile // ✅ Mark image as optional
 ) => {
     try {
-        // Assign image path to the subject data
+        // Assign image path if exists
         if (image && image.path) {
             subjectData.image = image.path;
         }
 
         // Create a new Subject instance
-        const subject = new Subject({
-            ...subjectData,
-        });
+        const subject = new Subject(subjectData);
 
         // Save to the database
         const result = await subject.save();
@@ -25,75 +25,63 @@ const createSubjectIntoDB = async (
         return result;
     } catch (error) {
         console.error("Error creating subject:", error);
-        throw new Error("Failed to create subject.");
+        throw new AppError(httpStatus.INTERNAL_SERVER_ERROR, "Failed to create subject.");
     }
 };
 
-
-const getAllSubject = async () => {
-    const result = await Subject.find()
-    return result;
+const getAllSubjects = async () => {
+    try {
+        const result = await Subject.find();
+        return result;
+    } catch (error) {
+        console.error("Error fetching subjects:", error);
+        throw new AppError(httpStatus.INTERNAL_SERVER_ERROR, "Failed to retrieve subjects.");
+    }
 };
 
-// const updateBrandIntoDB = async (
-//    id: string,
-//    payload: Partial<IBrand>,
-//    file: IImageFile,
-//    authUser: IJwtPayload
-// ) => {
-//    const isBrandExist = await Brand.findById(id);
-//    if (!isBrandExist) {
-//       throw new AppError(StatusCodes.NOT_FOUND, 'Brand not found!');
-//    }
+const updateSubjectIntoDB = async (
+    id: string,
+    payload: Partial<ISubject>,
+    file?: IImageFile
+) => {
+    console.log("payload", payload);
 
-//    if (
-//       authUser.role === UserRole.USER &&
-//       isBrandExist.createdBy.toString() !== authUser.userId
-//    ) {
-//       throw new AppError(
-//          StatusCodes.BAD_REQUEST,
-//          'You are not able to edit the category!'
-//       );
-//    }
+    const subject = await Subject.findById(id);
+    if (!subject) {
+        throw new AppError(httpStatus.NOT_FOUND, "Subject not found!");
+    }
 
-//    if (file && file.path) {
-//       payload.logo = file.path;
-//    }
+    // If an image is uploaded, update the image field
+    if (file && file.path) {
+        payload.image = file.path;
+    }
 
-//    const result = await Brand.findByIdAndUpdate(id, payload, { new: true });
+    // Update subject in the database
+    const updatedSubject = await Subject.findByIdAndUpdate(id, payload, { new: true });
 
-//    return result;
-// };
+    return updatedSubject;
+};
 
-// const deleteBrandIntoDB = async (
-//    id: string,
-//    authUser: IJwtPayload
-// ) => {
-//    const isBrandExist = await Brand.findById(id);
-//    if (!isBrandExist) {
-//       throw new AppError(StatusCodes.NOT_FOUND, 'Brand not found!');
-//    }
 
-//    if (
-//       authUser.role === UserRole.USER &&
-//       isBrandExist.createdBy.toString() !== authUser.userId
-//    ) {
-//       throw new AppError(
-//          StatusCodes.BAD_REQUEST,
-//          'You are not able to delete the brand!'
-//       );
-//    }
+const deleteSubjectFromDB = async (id: string, authUser: IJwtPayload) => {
+    const subject = await Subject.findById(id);
+    if (!subject) {
+        throw new AppError(httpStatus.NOT_FOUND, "Subject not found!");
+    }
 
-//    const product = await Product.findOne({ brand: id })
-//    if (product) throw new AppError(StatusCodes.BAD_REQUEST, "You can not delete the brand. Because the brand is related to products.");
+    // // Prevent students from deleting subjects
+    if (authUser.role === UserRole.STUDENT) {
+        throw new AppError(httpStatus.FORBIDDEN, "You are not allowed to delete this subject.");
+    }
 
-//    const deletedBrand = await Brand.findByIdAndDelete(id);
-//    return deletedBrand;
-// };
+    // Delete subject
+    const deletedSubject = await Subject.findByIdAndDelete(id);
+    return deletedSubject;
+};
 
 export const SubjectService = {
     createSubjectIntoDB,
-    getAllSubject,
-    //    updateBrandIntoDB,
-    //    deleteBrandIntoDB
+    getAllSubjects,
+    updateSubjectIntoDB,
+    deleteSubjectFromDB
 };

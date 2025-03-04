@@ -13,8 +13,10 @@ const ProfileSchema = new Schema<IProfile>(
         image: {
             type: String,
         },
-        subjects: {
-            type: [String],
+        subjects:{
+            type: Schema.Types.ObjectId,
+            ref: "Subject",
+            required: true,
         },
         role: {
             type: String,

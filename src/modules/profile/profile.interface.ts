@@ -3,7 +3,7 @@ import { UserRole } from "../user/user.interface";
 
 export interface IProfile extends Document {
     userId: Types.ObjectId;
-    subjects: string[];
+    subjects: Types.ObjectId;
     bio: string;
     role: UserRole.ADMIN | UserRole.STUDENT | UserRole.TUTOR;
     experience: number;

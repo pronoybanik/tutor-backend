@@ -4,7 +4,8 @@ import mongoose from 'mongoose';
 export interface ISubject extends Document {
   userId: mongoose.Types.ObjectId;
   name: string;
-  price: number;
+  hourly: number;
+  dateTimes: string[];
   gradeLevel: string;
   category: mongoose.Types.ObjectId;
   image: string
