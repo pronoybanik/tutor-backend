@@ -14,6 +14,19 @@ const registerUser = catchAsync(async (req, res) => {
   });
 });
 
+const getSingleUser = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  const result = await UserService.getSingleUserById(id);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'get Single User Successfully',
+    data: result,
+  });
+});
+
 export const UserController = {
   registerUser,
+  getSingleUser
 };

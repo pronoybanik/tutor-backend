@@ -11,6 +11,12 @@ const registerUserIntoDB = async (payload: IUser) => {
   return result;
 };
 
+const getSingleUserById = async (id: string) => {
+  const result = await User.findById(id);
+  return result;
+};
+
 export const UserService = {
   registerUserIntoDB,
+  getSingleUserById
 };
