@@ -7,24 +7,30 @@ import { USER_ROLE } from '../user/user.constant';
 
 const route = express.Router();
 
-route.post('/',
-    multerUpload.single('image'),
-    parseBody,
-    auth(USER_ROLE.admin, USER_ROLE.tutor),
-    SubjectController.createSubject);
+route.post(
+  '/',
+  multerUpload.single('image'),
+  parseBody,
+  auth(USER_ROLE.admin, USER_ROLE.tutor),
+  SubjectController.createSubject,
+);
 
 route.get('/findSubject', auth(), SubjectController.getTutorCreatedSubject);
 
 route.get('/', SubjectController.getAllSubject);
 
-route.patch('/:id',
-    multerUpload.single('image'),
-    parseBody,
-    auth(USER_ROLE.admin, USER_ROLE.tutor),
-    SubjectController.updateSubject
+route.patch(
+  '/:id',
+  multerUpload.single('image'),
+  parseBody,
+  auth(USER_ROLE.admin, USER_ROLE.tutor),
+  SubjectController.updateSubject,
 );
 
-route.delete('/:id', auth(USER_ROLE.admin, USER_ROLE.tutor), SubjectController.deleteSubject);
-
+route.delete(
+  '/:id',
+  auth(USER_ROLE.admin, USER_ROLE.tutor),
+  SubjectController.deleteSubject,
+);
 
 export const SubjectRoute = route;

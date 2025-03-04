@@ -6,7 +6,7 @@ const registerUserIntoDB = async (payload: IUser) => {
   const result = await User.create(payload);
   const { _id: userId } = result;
   if (userId) {
-    await Profile.create({ userId })
+    await Profile.create({ userId });
   }
   return result;
 };
@@ -18,5 +18,5 @@ const getSingleUserById = async (id: string) => {
 
 export const UserService = {
   registerUserIntoDB,
-  getSingleUserById
+  getSingleUserById,
 };

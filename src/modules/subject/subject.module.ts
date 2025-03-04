@@ -11,7 +11,7 @@ const SubjectSchema = new Schema<ISubject>(
     gradeLevel: { type: String, required: true },
     dateTimes: {
       type: [String],
-      default: []
+      default: [],
     },
     category: { type: Schema.Types.ObjectId, ref: 'Category', required: true },
   },

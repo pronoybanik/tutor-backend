@@ -8,5 +8,5 @@ export interface ISubject extends Document {
   dateTimes: string[];
   gradeLevel: string;
   category: mongoose.Types.ObjectId;
-  image: string
-};
+  image: string;
+}

@@ -7,12 +7,12 @@ import auth from '../../middlewares/auth';
 
 const route = express.Router();
 
-route.post('/',
-    auth(
-        USER_ROLE.admin,
-    ),
-    validateZodRequest(categoryValidations.createCategoryValidationSchema),
-    CategoryController.createCategory);
+route.post(
+  '/',
+  auth(USER_ROLE.admin),
+  validateZodRequest(categoryValidations.createCategoryValidationSchema),
+  CategoryController.createCategory,
+);
 route.get('/', auth(), CategoryController.allCategoryData);
 route.delete('/:id', CategoryController.deleteCategoryData);
 

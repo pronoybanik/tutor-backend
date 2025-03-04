@@ -1,102 +1,110 @@
-import { IImageFile } from "../../interface/IImageFile";
-import AppError from "../../middlewares/AppError";
-import { IJwtPayload } from "../auth/auth.interface";
-import { UserRole } from "../user/user.interface";
-import { ISubject } from "./subject.interface";
-import httpStatus from "http-status";
-import { Subject } from "./subject.module";
+import { IImageFile } from '../../interface/IImageFile';
+import AppError from '../../middlewares/AppError';
+import { IJwtPayload } from '../auth/auth.interface';
+import { UserRole } from '../user/user.interface';
+import { ISubject } from './subject.interface';
+import httpStatus from 'http-status';
+import { Subject } from './subject.module';
 
 const createSubjectIntoDB = async (
-    subjectData: Partial<ISubject>,
-    image?: IImageFile,
-    authUser?: IJwtPayload
+  subjectData: Partial<ISubject>,
+  image?: IImageFile,
+  authUser?: IJwtPayload,
 ) => {
-    try {
-        if (!authUser?.userId) {
-            throw new AppError(httpStatus.BAD_REQUEST, "User ID is required.");
-        }
-        // Assign image path if exists
-        if (image && image.path) {
-            subjectData.image = image.path;
-        }
-
-        // Create a new Subject instance
-        const subject = new Subject({ userId: authUser.userId, ...subjectData });
-
-        // Save to the database
-        const result = await subject.save();
-
-        return result;
-    } catch (error) {
-        console.error("Error creating subject:", error);
-        throw new AppError(httpStatus.INTERNAL_SERVER_ERROR, "Failed to create subject.");
+  try {
+    if (!authUser?.userId) {
+      throw new AppError(httpStatus.BAD_REQUEST, 'User ID is required.');
     }
+    // Assign image path if exists
+    if (image && image.path) {
+      subjectData.image = image.path;
+    }
+
+    // Create a new Subject instance
+    const subject = new Subject({ userId: authUser.userId, ...subjectData });
+
+    // Save to the database
+    const result = await subject.save();
+
+    return result;
+  } catch (error) {
+    console.error('Error creating subject:', error);
+    throw new AppError(
+      httpStatus.INTERNAL_SERVER_ERROR,
+      'Failed to create subject.',
+    );
+  }
 };
 
 const getAllSubjects = async () => {
-    try {
-        const result = await Subject.find();
-        return result;
-    } catch (error) {
-        console.error("Error fetching subjects:", error);
-        throw new AppError(httpStatus.INTERNAL_SERVER_ERROR, "Failed to retrieve subjects.");
-    }
+  try {
+    const result = await Subject.find();
+    return result;
+  } catch (error) {
+    console.error('Error fetching subjects:', error);
+    throw new AppError(
+      httpStatus.INTERNAL_SERVER_ERROR,
+      'Failed to retrieve subjects.',
+    );
+  }
 };
 
 const getTutorCreatedSubjectIntoDB = async (authUser: IJwtPayload) => {
+  if (!authUser?.userId) {
+    throw new AppError(httpStatus.BAD_REQUEST, 'User ID is required.');
+  }
 
-    if (!authUser?.userId) {
-        throw new AppError(httpStatus.BAD_REQUEST, "User ID is required.");
-    }
+  const result = await Subject.find({ userId: authUser.userId });
 
-    const result = await Subject.find({ userId: authUser.userId });
-
-    return result;
+  return result;
 };
-
 
 const updateSubjectIntoDB = async (
-    id: string,
-    payload: Partial<ISubject>,
-    file?: IImageFile
+  id: string,
+  payload: Partial<ISubject>,
+  file?: IImageFile,
 ) => {
-    const subject = await Subject.findById(id);
-    if (!subject) {
-        throw new AppError(httpStatus.NOT_FOUND, "Subject not found!");
-    }
+  const subject = await Subject.findById(id);
+  if (!subject) {
+    throw new AppError(httpStatus.NOT_FOUND, 'Subject not found!');
+  }
 
-    // If an image is uploaded, update the image field
-    if (file && file.path) {
-        payload.image = file.path;
-    }
+  // If an image is uploaded, update the image field
+  if (file && file.path) {
+    payload.image = file.path;
+  }
 
-    // Update subject in the database
-    const updatedSubject = await Subject.findByIdAndUpdate(id, payload, { new: true });
+  // Update subject in the database
+  const updatedSubject = await Subject.findByIdAndUpdate(id, payload, {
+    new: true,
+  });
 
-    return updatedSubject;
+  return updatedSubject;
 };
 
-
 const deleteSubjectFromDB = async (id: string, authUser: IJwtPayload) => {
-    const subject = await Subject.findById(id);
-    if (!subject) {
-        throw new AppError(httpStatus.NOT_FOUND, "Subject not found!");
-    }
+  const subject = await Subject.findById(id);
+  if (!subject) {
+    throw new AppError(httpStatus.NOT_FOUND, 'Subject not found!');
+  }
 
-    // // Prevent students from deleting subjects
-    if (authUser.role === UserRole.STUDENT) {
-        throw new AppError(httpStatus.FORBIDDEN, "You are not allowed to delete this subject.");
-    }
+  // // Prevent students from deleting subjects
+  if (authUser.role === UserRole.STUDENT) {
+    throw new AppError(
+      httpStatus.FORBIDDEN,
+      'You are not allowed to delete this subject.',
+    );
+  }
 
-    // Delete subject
-    const deletedSubject = await Subject.findByIdAndDelete(id);
-    return deletedSubject;
+  // Delete subject
+  const deletedSubject = await Subject.findByIdAndDelete(id);
+  return deletedSubject;
 };
 
 export const SubjectService = {
-    createSubjectIntoDB,
-    getAllSubjects,
-    updateSubjectIntoDB,
-    deleteSubjectFromDB,
-    getTutorCreatedSubjectIntoDB
+  createSubjectIntoDB,
+  getAllSubjects,
+  updateSubjectIntoDB,
+  deleteSubjectFromDB,
+  getTutorCreatedSubjectIntoDB,
 };
