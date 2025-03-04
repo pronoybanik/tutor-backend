@@ -12,7 +12,8 @@ const createSubject = catchAsync(async (req: Request, res: Response) => {
 
     const result = await SubjectService.createSubjectIntoDB(
         req.body,
-        req.file as IImageFile
+        req.file as IImageFile,
+        req.user as IJwtPayload
     );
 
     sendResponse(res, {
@@ -26,6 +27,20 @@ const createSubject = catchAsync(async (req: Request, res: Response) => {
 
 const getAllSubject = catchAsync(async (req, res) => {
     const result = await SubjectService.getAllSubjects();
+
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: 'Subject are retrieved successfully',
+        // meta: result.meta,
+        data: result,
+    });
+});
+
+const getTutorCreatedSubject = catchAsync(async (req, res) => {
+    
+
+    const result = await SubjectService.getTutorCreatedSubjectIntoDB(req.user as IJwtPayload);
 
     sendResponse(res, {
         statusCode: httpStatus.OK,
@@ -70,5 +85,6 @@ export const SubjectController = {
     createSubject,
     getAllSubject,
     updateSubject,
-    deleteSubject
+    deleteSubject,
+    getTutorCreatedSubject
 };

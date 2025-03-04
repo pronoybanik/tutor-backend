@@ -15,8 +15,7 @@ const ProfileSchema = new Schema<IProfile>(
         },
         subjects:{
             type: Schema.Types.ObjectId,
-            ref: "Subject",
-            required: true,
+            ref: "Subject"
         },
         role: {
             type: String,

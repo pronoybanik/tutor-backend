@@ -13,6 +13,8 @@ route.post('/',
     auth(USER_ROLE.admin, USER_ROLE.tutor),
     SubjectController.createSubject);
 
+route.get('/findSubject', auth(), SubjectController.getTutorCreatedSubject);
+
 route.get('/', SubjectController.getAllSubject);
 
 route.patch('/:id',

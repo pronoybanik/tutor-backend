@@ -8,16 +8,20 @@ import { Subject } from "./subject.module";
 
 const createSubjectIntoDB = async (
     subjectData: Partial<ISubject>,
-    image?: IImageFile // ✅ Mark image as optional
+    image?: IImageFile,
+    authUser?: IJwtPayload
 ) => {
     try {
+        if (!authUser?.userId) {
+            throw new AppError(httpStatus.BAD_REQUEST, "User ID is required.");
+        }
         // Assign image path if exists
         if (image && image.path) {
             subjectData.image = image.path;
         }
 
         // Create a new Subject instance
-        const subject = new Subject(subjectData);
+        const subject = new Subject({ userId: authUser.userId, ...subjectData });
 
         // Save to the database
         const result = await subject.save();
@@ -39,13 +43,23 @@ const getAllSubjects = async () => {
     }
 };
 
+const getTutorCreatedSubjectIntoDB = async (authUser: IJwtPayload) => {
+
+    if (!authUser?.userId) {
+        throw new AppError(httpStatus.BAD_REQUEST, "User ID is required.");
+    }
+
+    const result = await Subject.find({ userId: authUser.userId });
+
+    return result;
+};
+
+
 const updateSubjectIntoDB = async (
     id: string,
     payload: Partial<ISubject>,
     file?: IImageFile
 ) => {
-    console.log("payload", payload);
-
     const subject = await Subject.findById(id);
     if (!subject) {
         throw new AppError(httpStatus.NOT_FOUND, "Subject not found!");
@@ -83,5 +97,6 @@ export const SubjectService = {
     createSubjectIntoDB,
     getAllSubjects,
     updateSubjectIntoDB,
-    deleteSubjectFromDB
+    deleteSubjectFromDB,
+    getTutorCreatedSubjectIntoDB
 };
