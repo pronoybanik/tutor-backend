@@ -18,6 +18,7 @@ route.post(
 route.get('/findSubject', auth(), SubjectController.getTutorCreatedSubject);
 
 route.get('/', SubjectController.getAllSubject);
+route.get('/:id', SubjectController.getSingleSubject);
 
 route.patch(
   '/:id',

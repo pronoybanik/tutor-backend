@@ -72,7 +72,7 @@ const ProfileSchema = new Schema<IProfile>(
     requestRole: {
       type: String,
       enum: [UserRole.TUTOR, UserRole.STUDENT],
-      default: UserRole.STUDENT,
+      default: null,
     },
     isVerified: {
       type: Boolean,

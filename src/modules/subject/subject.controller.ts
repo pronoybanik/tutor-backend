@@ -81,10 +81,23 @@ const deleteSubject = catchAsync(async (req, res) => {
   });
 });
 
+const getSingleSubject = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  const result = await SubjectService.getSingleSubjectIntoDB(id);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Subject respond successfully',
+    data: result,
+  });
+});
+
 export const SubjectController = {
   createSubject,
   getAllSubject,
   updateSubject,
   deleteSubject,
   getTutorCreatedSubject,
+  getSingleSubject,
 };

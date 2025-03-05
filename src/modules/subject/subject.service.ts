@@ -101,10 +101,22 @@ const deleteSubjectFromDB = async (id: string, authUser: IJwtPayload) => {
   return deletedSubject;
 };
 
+const getSingleSubjectIntoDB = async (id: string) => {
+  const subject = await Subject.findById(id);
+  if (!subject) {
+    throw new AppError(httpStatus.NOT_FOUND, 'Subject not found!');
+  }
+
+ 
+  const result = await Subject.findById(id).populate("userId");
+  return result;
+};
+
 export const SubjectService = {
   createSubjectIntoDB,
   getAllSubjects,
   updateSubjectIntoDB,
   deleteSubjectFromDB,
   getTutorCreatedSubjectIntoDB,
+  getSingleSubjectIntoDB,
 };

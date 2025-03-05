@@ -7,8 +7,13 @@ const route = express.Router();
 
 route.put('/:id', auth(), ProfileController.updateProfile);
 route.get('/me', auth(), ProfileController.getUserProfile);
+
+route.get('/tutor', ProfileController.getAllTutorProfile);
+
 route.get('/:id', ProfileController.getUserSingleProfile);
+
 route.get('/', ProfileController.getAllUserProfile);
+
 route.patch(
   '/:id/role',
   auth(USER_ROLE.admin),

@@ -61,6 +61,17 @@ const getAllUserProfile = catchAsync(async (req, res) => {
   });
 });
 
+const getAllTutorProfile = catchAsync(async (req, res) => {
+  const result = await ProfileService.getAllTutorProfileIntoDB();
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'get tutor Profile successfully',
+    data: result,
+  });
+});
+
 const updateUserRole = catchAsync(async (req, res) => {
   const { id } = req.params;
   const { role } = req.body;
@@ -81,4 +92,5 @@ export const ProfileController = {
   getUserSingleProfile,
   getAllUserProfile,
   updateUserRole,
+  getAllTutorProfile,
 };

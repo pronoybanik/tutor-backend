@@ -75,6 +75,11 @@ const getAllUserProfileIntoDB = async () => {
   return result;
 };
 
+const getAllTutorProfileIntoDB = async () => {
+  const result = await Profile.find({ role: 'tutor' });
+  return result;
+};
+
 const updateUserRoleIntoDB = async (id: string, newRole: string) => {
   console.log(id, newRole);
 
@@ -105,7 +110,7 @@ const updateUserRoleIntoDB = async (id: string, newRole: string) => {
   // Update the Profile role
   const updatedProfile = await Profile.findByIdAndUpdate(
     id,
-    { role: newRole, requestRole: null },
+    { role: newRole, requestRole: null, isVerified: true },
     { new: true },
   );
 
@@ -125,4 +130,5 @@ export const ProfileService = {
   getUserSingleProfileIntoDB,
   getAllUserProfileIntoDB,
   updateUserRoleIntoDB,
+  getAllTutorProfileIntoDB,
 };
