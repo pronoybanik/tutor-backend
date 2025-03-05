@@ -4,6 +4,7 @@ import { AuthRoute } from '../modules/auth/auth.route';
 import { CategoryRoute } from '../modules/category/category.route';
 import { SubjectRoute } from '../modules/subject/subject.route';
 import { ProfileRoute } from '../modules/profile/profile.route';
+import { BlogsRoute } from '../modules/blogs/blog.routes';
 const router = Router();
 
 const moduleRoutes = [
@@ -26,6 +27,10 @@ const moduleRoutes = [
   {
     path: '/profile',
     router: ProfileRoute,
+  },
+  {
+    path: '/blogs',
+    router: BlogsRoute,
   },
 ];
 
