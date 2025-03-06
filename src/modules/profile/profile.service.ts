@@ -71,12 +71,12 @@ const getUserSingleProfileIntoDB = async (id: string) => {
   return result;
 };
 const getAllUserProfileIntoDB = async () => {
-  const result = await Profile.find({});
+  const result = await Profile.find({}).populate("userId");
   return result;
 };
 
 const getAllTutorProfileIntoDB = async () => {
-  const result = await Profile.find({ role: 'tutor' });
+  const result = await Profile.find({ role: 'tutor' }).populate("userId");
   return result;
 };
 
