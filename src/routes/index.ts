@@ -5,6 +5,7 @@ import { CategoryRoute } from '../modules/category/category.route';
 import { SubjectRoute } from '../modules/subject/subject.route';
 import { ProfileRoute } from '../modules/profile/profile.route';
 import { BlogsRoute } from '../modules/blogs/blog.routes';
+import { BookingRoute } from '../modules/booking/booking.route';
 const router = Router();
 
 const moduleRoutes = [
@@ -31,6 +32,10 @@ const moduleRoutes = [
   {
     path: '/blogs',
     router: BlogsRoute,
+  },
+  {
+    path: '/booking',
+    router: BookingRoute,
   },
 ];
 

@@ -8,8 +8,6 @@ import mongoose from 'mongoose';
 
 const createBlogsIntoDB = async (payload: IBlogs, user: JwtPayload) => {
 
-  console.log("prient", { payload, user });
-
   const authorValidation = await User.findOne({
     _id: user.userId,
   });
