@@ -7,7 +7,6 @@ import httpStatus from 'http-status';
 import mongoose from 'mongoose';
 
 const createBlogsIntoDB = async (payload: IBlogs, user: JwtPayload) => {
-
   const authorValidation = await User.findOne({
     _id: user.userId,
   });
@@ -21,7 +20,6 @@ const createBlogsIntoDB = async (payload: IBlogs, user: JwtPayload) => {
   const result = await BlogsModel.create(payload);
   return result;
 };
-
 
 const getAllBlogsFromDB = async (query: Record<string, unknown>) => {
   const queryObj = { ...query };
@@ -46,9 +44,6 @@ const getAllBlogsFromDB = async (query: Record<string, unknown>) => {
   if (query?.filter) {
     queryObj['author._id'] = query.filter;
   }
-
-  console.log({ query, queryObj });
-
   const filterQuery = searchQuery.find(queryObj).populate('author');
 
   const sortBy = query?.sortBy ? (query.sortBy as string) : 'createdAt';
@@ -79,7 +74,7 @@ const deleteBlogsIntoDB = async (id: string) => {
 };
 
 const getSingleBlogIntoDB = async (id: string) => {
-  const result = await BlogsModel.findById(id).populate("author");
+  const result = await BlogsModel.findById(id).populate('author');
   return result;
 };
 
@@ -88,5 +83,5 @@ export const BlogsServices = {
   getAllBlogsFromDB,
   updateBlogsIntoDB,
   deleteBlogsIntoDB,
-  getSingleBlogIntoDB
+  getSingleBlogIntoDB,
 };

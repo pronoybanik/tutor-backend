@@ -107,8 +107,7 @@ const getSingleSubjectIntoDB = async (id: string) => {
     throw new AppError(httpStatus.NOT_FOUND, 'Subject not found!');
   }
 
- 
-  const result = await Subject.findById(id).populate("userId");
+  const result = await Subject.findById(id).populate('userId');
   return result;
 };
 

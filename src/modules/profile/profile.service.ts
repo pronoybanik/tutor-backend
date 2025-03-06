@@ -81,8 +81,6 @@ const getAllTutorProfileIntoDB = async () => {
 };
 
 const updateUserRoleIntoDB = async (id: string, newRole: string) => {
-  console.log(id, newRole);
-
   // Find profile by ID
   const profile = await Profile.findById(id);
   if (!profile) {

@@ -6,7 +6,7 @@ import httpStatus from 'http-status';
 
 const createBlogs = catchAsync(async (req, res, next) => {
   const data = req.body;
-  const user = req.user as JwtPayload
+  const user = req.user as JwtPayload;
   const result = await BlogsServices.createBlogsIntoDB(data, user);
 
   sendResponse(res, {
