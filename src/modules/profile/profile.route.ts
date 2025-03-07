@@ -16,7 +16,7 @@ route.get('/', ProfileController.getAllUserProfile);
 
 route.patch(
   '/:id/role',
-  auth(USER_ROLE.admin),
+  auth(USER_ROLE.admin, USER_ROLE.student),
   ProfileController.updateUserRole,
 );
 

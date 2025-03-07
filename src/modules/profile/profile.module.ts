@@ -10,7 +10,8 @@ const ProfileSchema = new Schema<IProfile>(
       required: true,
     },
     image: {
-      type: String, // Profile picture URL
+      type: String,
+      default: null, // Profile picture URL
     },
     bio: {
       type: String,
