@@ -5,6 +5,8 @@ import { UserRole } from '../user/user.interface';
 import { ISubject } from './subject.interface';
 import httpStatus from 'http-status';
 import { Subject } from './subject.module';
+import QueryBuilder from '../../builder/QueryBuilder';
+import { SubjectSearchableFields } from './subject.constant';
 
 const createSubjectIntoDB = async (
   subjectData: Partial<ISubject>,
@@ -36,18 +38,34 @@ const createSubjectIntoDB = async (
   }
 };
 
-const getAllSubjects = async () => {
+const getAllSubjects = async (query: Record<string, unknown>) => {
   try {
-    const result = await Subject.find();
-    return result;
+    const subjectQuery = new QueryBuilder(Subject.find()
+      .populate("category")
+      , query)
+
+      .search(SubjectSearchableFields)
+      .filter()
+      .sort()
+      .paginate()
+      .fields();
+
+    const result = await subjectQuery.modelQuery;
+    const meta = await subjectQuery.countTotal();
+
+    return {
+      meta,
+      result,
+    };
   } catch (error) {
-    console.error('Error fetching subjects:', error);
+    console.error("Error fetching subjects:", error);
     throw new AppError(
       httpStatus.INTERNAL_SERVER_ERROR,
-      'Failed to retrieve subjects.',
+      "Failed to retrieve subjects."
     );
   }
 };
+
 
 const getTutorCreatedSubjectIntoDB = async (authUser: IJwtPayload) => {
   if (!authUser?.userId) {

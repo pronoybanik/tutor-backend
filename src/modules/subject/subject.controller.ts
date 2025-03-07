@@ -23,14 +23,14 @@ const createSubject = catchAsync(async (req: Request, res: Response) => {
 });
 
 const getAllSubject = catchAsync(async (req, res) => {
-  const result = await SubjectService.getAllSubjects();
+  const result = await SubjectService.getAllSubjects(req.query);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
     message: 'Subject are retrieved successfully',
-    // meta: result.meta,
-    data: result,
+    meta: result.meta,
+    data: result.result,
   });
 });
 

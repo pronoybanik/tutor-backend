@@ -13,7 +13,7 @@ route.post(
   validateZodRequest(categoryValidations.createCategoryValidationSchema),
   CategoryController.createCategory,
 );
-route.get('/', auth(), CategoryController.allCategoryData);
+route.get('/', CategoryController.allCategoryData);
 route.delete('/:id', CategoryController.deleteCategoryData);
 
 export const CategoryRoute = route;
