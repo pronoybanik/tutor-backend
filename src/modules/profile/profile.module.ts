@@ -32,7 +32,6 @@ const ProfileSchema = new Schema<IProfile>(
     rates: {
       hourlyRate: {
         type: Number,
-        required: true,
         min: 0,
       },
       discount: {
