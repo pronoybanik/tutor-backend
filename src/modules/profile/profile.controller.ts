@@ -86,6 +86,21 @@ const updateUserRole = catchAsync(async (req, res) => {
   });
 });
 
+const updateFeedBack = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  const data = req.body;
+  const {userId} = req.user as JwtPayload;
+
+  const result = await ProfileService.updateFeedBackIntoDB(id, userId, data);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'update Profile successfully',
+    data: result,
+  });
+});
+
 export const ProfileController = {
   updateProfile,
   getUserProfile,
@@ -93,4 +108,5 @@ export const ProfileController = {
   getAllUserProfile,
   updateUserRole,
   getAllTutorProfile,
+  updateFeedBack
 };

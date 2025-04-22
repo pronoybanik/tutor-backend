@@ -3,6 +3,7 @@ import { User } from '../user/user.module';
 import { IProfile } from './profile.interface';
 import httpStatus from 'http-status';
 import { Profile } from './profile.module';
+import { Types } from "mongoose";
 
 const updateProfileIntoDB = async (
   userId: string,
@@ -28,14 +29,6 @@ const updateProfileIntoDB = async (
         'You cannot update this profile!',
       );
     }
-
-    // Step 3: If role is updated, update the User model too
-    // if (payload.role && payload.role !== user.role) {
-    //     await User.updateOne(
-    //         { _id: user._id },
-    //         { $set: { role: payload.role } }
-    //     );
-    // }
 
     // Step 4: Update profile data
     const updatedProfile = await Profile.findByIdAndUpdate(
@@ -122,6 +115,41 @@ const updateUserRoleIntoDB = async (id: string, newRole: string) => {
   return updatedProfile;
 };
 
+const updateFeedBackIntoDB = async (
+  id: string,
+  userId: string,
+  data: { comment: string; rating: number }
+) => {
+  const { comment, rating } = data;
+
+  const profile = await Profile.findById(id);
+  if (!profile) {
+    throw new AppError(httpStatus.NOT_FOUND, "Profile not found");
+  }
+
+  profile.reviews.push({
+    studentId: new Types.ObjectId(userId),
+    comment,
+    createdAt: new Date(),
+  });
+
+  const currentRating = profile.ratings ?? 0;
+  const totalReviews = profile.reviews.length;
+  const totalRating = currentRating * (totalReviews - 1) + rating;
+
+  profile.ratings = Math.min(
+    5,
+    parseFloat((totalRating / totalReviews).toFixed(1))
+  );
+
+  const result = await profile.save();
+
+  return result;
+};
+
+
+
+
 export const ProfileService = {
   updateProfileIntoDB,
   getUserProfileIntoDB,
@@ -129,4 +157,5 @@ export const ProfileService = {
   getAllUserProfileIntoDB,
   updateUserRoleIntoDB,
   getAllTutorProfileIntoDB,
+  updateFeedBackIntoDB
 };

@@ -1,15 +1,33 @@
+import mongoose from "mongoose";
 import { Profile } from '../profile/profile.module';
 import { IUser } from './user.interface';
 import { User } from './user.module';
 
+
 const registerUserIntoDB = async (payload: IUser) => {
-  const result = await User.create(payload);
-  const { _id: userId } = result;
-  if (userId) {
-    await Profile.create({ userId });
+  const session = await mongoose.startSession();
+  session.startTransaction();
+
+  try {
+    // Create user
+    const user = await User.create([payload], { session });
+    const { _id: userId, role } = user[0];
+
+    // Create profile with userId
+    await Profile.create([{ userId, role }], { session });
+
+    // Commit transaction
+    await session.commitTransaction();
+    session.endSession();
+
+    return user[0];
+  } catch (error) {
+    await session.abortTransaction();
+    session.endSession();
+    throw error;
   }
-  return result;
 };
+
 
 const getSingleUserById = async (id: string) => {
   const result = await User.findById(id);

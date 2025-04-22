@@ -23,7 +23,7 @@ const ProfileSchema = new Schema<IProfile>(
     role: {
       type: String,
       enum: [UserRole.ADMIN, UserRole.STUDENT, UserRole.TUTOR],
-      default: UserRole.STUDENT,
+      required: true
     },
     experience: {
       type: Number,
@@ -79,7 +79,7 @@ const ProfileSchema = new Schema<IProfile>(
       default: false,
     },
     callToAction: {
-      type: String, // Example: "Book a session now!"
+      type: String,
       enum: ['done', 'cancel', 'in-progress'],
       default: null,
     },

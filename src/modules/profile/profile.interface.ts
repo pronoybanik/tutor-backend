@@ -4,7 +4,6 @@ import { UserRole } from '../user/user.interface';
 export interface IReview {
   studentId: Types.ObjectId;
   comment: string;
-  rating: number;
   createdAt?: Date;
 }
 
