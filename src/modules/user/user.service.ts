@@ -13,8 +13,14 @@ const registerUserIntoDB = async (payload: IUser) => {
     const user = await User.create([payload], { session });
     const { _id: userId, role } = user[0];
 
+    // Prepare profile payload
+    const profilePayload: any = { userId, role };
+    if (role === "tutor") {
+      profilePayload.isVerified = true;
+    }
+
     // Create profile with userId
-    await Profile.create([{ userId, role }], { session });
+    await Profile.create([profilePayload], { session });
 
     // Commit transaction
     await session.commitTransaction();
@@ -27,6 +33,7 @@ const registerUserIntoDB = async (payload: IUser) => {
     throw error;
   }
 };
+
 
 
 const getSingleUserById = async (id: string) => {

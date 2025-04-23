@@ -6,7 +6,8 @@ import NotFound from './middlewares/notFound';
 const app: Application = express();
 
 //parsers
-app.use(cors({ origin: 'http://localhost:3000' }));
+app.use(cors({ origin: 'https://tutor-frontend-khaki.vercel.app' }));
+// app.use(cors({ origin: 'http://localhost:3000' }));
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

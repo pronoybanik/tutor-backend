@@ -55,16 +55,17 @@ const updateProfileIntoDB = async (
 };
 
 const getUserProfileIntoDB = async (userId: string) => {
-  const result = await Profile.findOne({ userId });
+  const result = await Profile.findOne({ userId }).populate("reviews.studentId");
   return result;
 };
 
 const getUserSingleProfileIntoDB = async (id: string) => {
-  const result = await Profile.findById(id);
+  const result = await Profile.findById(id).populate("userId").populate("reviews.studentId");
   return result;
 };
+
 const getAllUserProfileIntoDB = async () => {
-  const result = await Profile.find({}).populate("userId");
+  const result = await Profile.find({});
   return result;
 };
 
