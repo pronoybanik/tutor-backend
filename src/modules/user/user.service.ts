@@ -35,7 +35,6 @@ const registerUserIntoDB = async (payload: IUser) => {
 };
 
 
-
 const getSingleUserById = async (id: string) => {
   const result = await User.findById(id);
   return result;
