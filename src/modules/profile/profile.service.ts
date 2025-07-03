@@ -65,7 +65,7 @@ const getUserSingleProfileIntoDB = async (id: string) => {
 };
 
 const getAllUserProfileIntoDB = async () => {
-  const result = await Profile.find({});
+  const result = await Profile.find({}).populate("userId");
   return result;
 };
 
